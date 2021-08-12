@@ -1,8 +1,4 @@
-/* eslint-disable camelcase */
-
-exports.shorthands = undefined;
-
-exports.up = pgm => {
+exports.up = (pgm) => {
     pgm.createTable('musics', {
         id: {
             type: 'VARCHAR(50)',
@@ -37,6 +33,6 @@ exports.up = pgm => {
     });
 };
 
-exports.down = pgm => {
+exports.down = (pgm) => {
     pgm.dropTable('musics');
 };

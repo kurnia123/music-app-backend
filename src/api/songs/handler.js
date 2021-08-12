@@ -36,14 +36,8 @@ class MusicHandler {
             return response;
         } catch (error) {
             if (error instanceof ClientError) {
-                const response = h.response({
-                    status: 'fail',
-                    message: error.message,
-                });
-                response.code(error.statusCode);
-                return response;
+                return error;
             }
-
             // Server ERROR!
             const response = h.response({
                 status: 'error',
@@ -77,14 +71,8 @@ class MusicHandler {
             };
         } catch (error) {
             if (error instanceof ClientError) {
-                const response = h.response({
-                    status: 'fail',
-                    message: error.message,
-                });
-                response.code(error.statusCode);
-                return response;
+                return error;
             }
-
             // Server ERROR!
             const response = h.response({
                 status: 'error',
@@ -110,14 +98,8 @@ class MusicHandler {
             };
         } catch (error) {
             if (error instanceof ClientError) {
-                const response = h.response({
-                    status: 'fail',
-                    message: error.message,
-                });
-                response.code(error.statusCode);
-                return response;
+                return error;
             }
-
             // Server ERROR!
             const response = h.response({
                 status: 'error',
@@ -140,14 +122,8 @@ class MusicHandler {
             };
         } catch (error) {
             if (error instanceof ClientError) {
-                const response = h.response({
-                    status: 'fail',
-                    message: error.message,
-                });
-                response.code(error.statusCode);
-                return response;
+                return error;
             }
-
             // Server ERROR!
             const response = h.response({
                 status: 'error',

@@ -17,6 +17,6 @@
         "no-console": "off",
         "no-underscore-dangle": 0,
         "object-curly-newline": 0,
-        "ignoreGlobals": true
+        "camelcase": ["error", { "properties": "never", "ignoreDestructuring": true }]
     }
 }
