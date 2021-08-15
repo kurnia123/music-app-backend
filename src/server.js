@@ -3,6 +3,7 @@ require('dotenv').config();
 const Hapi = require('@hapi/hapi');
 const Jwt = require('@hapi/jwt');
 const ClientError = require('./exceptions/ClientError');
+const TokenManager = require('./tokenize/TokenManager');
 
 const music = require('./api/songs');
 const MusicService = require('./services/MusicService');
@@ -15,13 +16,27 @@ const UsersValidator = require('./validator/users');
 
 const authentications = require('./api/authentication');
 const AuthenticationsService = require('./services/AuthenticationService');
-const TokenManager = require('./tokenize/TokenManager');
 const AuthenticationsValidator = require('./validator/authentication');
 
+const playlist = require('./api/playlist');
+const PlaylistService = require('./services/PlaylistService');
+const PlaylistsValidator = require('./validator/playlist');
+
+const playlistsongs = require('./api/playlistsongs');
+const PlaylistSongService = require('./services/PlaylistSongService');
+const PlaylistsSongValidator = require('./validator/playlistsongs');
+
+const collaborations = require('./api/collaborations');
+const CollaborationsService = require('./services/CollaborationService');
+const CollaborationsValidator = require('./validator/collaborations');
+
 const init = async () => {
+    const collaborationsService = new CollaborationsService();
+    const playlistService = new PlaylistService(collaborationsService);
     const musicService = new MusicService();
     const usersService = new UsersService();
     const authenticationsService = new AuthenticationsService();
+    const playlistSongService = new PlaylistSongService();
 
     const server = Hapi.server({
         port: process.env.PORT,
@@ -77,6 +92,29 @@ const init = async () => {
                 usersService,
                 tokenManager: TokenManager,
                 validator: AuthenticationsValidator,
+            },
+        },
+        {
+            plugin: playlist,
+            options: {
+                playlistService,
+                validator: PlaylistsValidator,
+            },
+        },
+        {
+            plugin: playlistsongs,
+            options: {
+                playlistSongService,
+                playlistService,
+                validator: PlaylistsSongValidator,
+            },
+        },
+        {
+            plugin: collaborations,
+            options: {
+                collaborationsService,
+                playlistService,
+                validator: CollaborationsValidator,
             },
         },
     ]);
