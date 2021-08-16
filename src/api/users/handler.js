@@ -1,3 +1,4 @@
+const autoBind = require('auto-bind');
 const ClientError = require('../../exceptions/ClientError');
 
 class UsersHandler {
@@ -5,9 +6,7 @@ class UsersHandler {
         this._service = service;
         this._validator = validator;
 
-        this.postUserHandler = this.postUserHandler.bind(this);
-        this.getUserByIdHandler = this.getUserByIdHandler.bind(this);
-        this.getUsersByUsernameHandler = this.getUsersByUsernameHandler.bind(this);
+        autoBind(this);
     }
 
     async postUserHandler(request, h) {
@@ -28,12 +27,7 @@ class UsersHandler {
             return response;
         } catch (error) {
             if (error instanceof ClientError) {
-                const response = h.response({
-                    status: 'fail',
-                    message: error.message,
-                });
-                response.code(error.statusCode);
-                return response;
+                return error;
             }
 
             // Server ERROR!
@@ -61,12 +55,7 @@ class UsersHandler {
             };
         } catch (error) {
             if (error instanceof ClientError) {
-                const response = h.response({
-                    status: 'fail',
-                    message: error.message,
-                });
-                response.code(error.statusCode);
-                return response;
+                return error;
             }
 
             // server ERROR!
@@ -92,12 +81,7 @@ class UsersHandler {
             };
         } catch (error) {
             if (error instanceof ClientError) {
-                const response = h.response({
-                    status: 'fail',
-                    message: error.message,
-                });
-                response.code(error.statusCode);
-                return response;
+                return error;
             }
 
             // Server ERROR!

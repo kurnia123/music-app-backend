@@ -1,3 +1,4 @@
+const autoBind = require('auto-bind');
 const ClientError = require('../../exceptions/ClientError');
 
 class MusicHandler {
@@ -5,11 +6,7 @@ class MusicHandler {
         this._service = service;
         this._validator = validator;
 
-        this.postMusicHandler = this.postMusicHandler.bind(this);
-        this.getMusicsHandler = this.getMusicsHandler.bind(this);
-        this.getMusicByIdHandler = this.getMusicByIdHandler.bind(this);
-        this.putMusicByIdHandler = this.putMusicByIdHandler.bind(this);
-        this.deleteMusicByIdHandler = this.deleteMusicByIdHandler.bind(this);
+        autoBind(this);
     }
 
     async postMusicHandler(request, h) {

@@ -1,3 +1,4 @@
+const autoBind = require('auto-bind');
 const ClientError = require('../../exceptions/ClientError');
 
 class CollaborationsHandler {
@@ -6,8 +7,7 @@ class CollaborationsHandler {
         this._playlistService = playlistService;
         this._validator = validator;
 
-        this.postCollaborationHandler = this.postCollaborationHandler.bind(this);
-        this.deleteCollaborationHandler = this.deleteCollaborationHandler.bind(this);
+        autoBind(this);
     }
 
     async postCollaborationHandler(request, h) {
