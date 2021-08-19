@@ -49,7 +49,7 @@ const init = async () => {
     const playlistService = new PlaylistService(collaborationsService, cacheService);
     const musicService = new MusicService();
     const usersService = new UsersService();
-    const authenticationsService = new AuthenticationsService();
+    const authenticationsService = new AuthenticationsService(cacheService);
     const playlistSongService = new PlaylistSongService(cacheService);
     const storageService = new StorageService(path.resolve(__dirname, 'api/uploads/file/images'));
 
