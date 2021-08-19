@@ -2,8 +2,9 @@ const { Pool } = require('pg');
 const InvariantError = require('../exceptions/InvariantError');
 
 class AuthenticationsService {
-    constructor() {
+    constructor(cacheService) {
         this._pool = new Pool();
+        this._cacheService = cacheService;
     }
 
     async addRefreshToken(token) {
@@ -13,18 +14,27 @@ class AuthenticationsService {
         };
 
         await this._pool.query(query);
+        await this._cacheService.delete(`auth:${token}`);
     }
 
     async verifyRefreshToken(token) {
-        const query = {
-            text: 'SELECT token FROM authentications WHERE token = $1',
-            values: [token],
-        };
+        try {
+            const result = await this._cacheService.get(`auth:${token}`);
+            return JSON.parse(result);
+        } catch (error) {
+            const query = {
+                text: 'SELECT token FROM authentications WHERE token = $1',
+                values: [token],
+            };
 
-        const result = await this._pool.query(query);
+            const result = await this._pool.query(query);
 
-        if (!result.rows.length) {
-            throw new InvariantError('Refresh token tidak valid');
+            if (!result.rows.length) {
+                throw new InvariantError('Refresh token tidak valid');
+            }
+
+            await this._cacheService.set(`auth:${token}`, JSON.stringify(result.rows));
+            return result.rows;
         }
     }
 
@@ -37,6 +47,7 @@ class AuthenticationsService {
         };
 
         await this._pool.query(query);
+        await this._cacheService.delete(`auth:${token}`);
     }
 }
 
