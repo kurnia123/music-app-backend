@@ -46,7 +46,7 @@ const CacheService = require('./services/cache/CacheService');
 const init = async () => {
     const cacheService = new CacheService();
     const collaborationsService = new CollaborationsService(cacheService);
-    const playlistService = new PlaylistService(collaborationsService);
+    const playlistService = new PlaylistService(collaborationsService, cacheService);
     const musicService = new MusicService();
     const usersService = new UsersService();
     const authenticationsService = new AuthenticationsService();
